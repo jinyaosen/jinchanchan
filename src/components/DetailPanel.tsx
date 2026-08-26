@@ -27,7 +27,7 @@ export default function DetailPanel() {
   const suggestion = useMemo<Suggestion | null>(() => {
     if (!result || champions.length === 0 || traits.length === 0) return null;
     try {
-      const data = prepareSolverData(champions, traits, config);
+      const data = prepareSolverData(champions, traits, config, mode);
       const lockedIds = new Set(data.lockedHeroes.map((h) => h.id));
       const freeSelected = result.heroes.filter((h) => !lockedIds.has(h.id));
       const selectedIds = new Set(result.heroes.map((h) => h.id));
@@ -75,7 +75,7 @@ export default function DetailPanel() {
                 双倍羁绊：<span className="lux-text font-bold">{result.luxDoubleTrait}</span>
               </p>
               <p className="mt-1 text-[11px] text-secondary">
-                拉克丝对该羁绊的计数额外 +1，帮助冲更高阈值层级。
+                拉克丝对该羁绊提供 2 点计数，帮助冲更高阈值层级。
               </p>
             </div>
           ) : (

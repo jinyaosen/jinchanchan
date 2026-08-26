@@ -6,6 +6,8 @@ interface TraitBadgeProps {
   count: number;
   emblemCount?: number;
   luxAssisted?: boolean;
+  /** 当前阵容中提供该羁绊的英雄/纹章说明 */
+  contributors?: string[];
 }
 
 function nextThresholdInfo(trait: Trait, count: number): { next: number | null; progress: number } {
@@ -16,7 +18,13 @@ function nextThresholdInfo(trait: Trait, count: number): { next: number | null; 
   return { next, progress: (count - prev) / (next - prev) };
 }
 
-export default function TraitBadge({ trait, count, emblemCount = 0, luxAssisted = false }: TraitBadgeProps) {
+export default function TraitBadge({
+  trait,
+  count,
+  emblemCount = 0,
+  luxAssisted = false,
+  contributors = [],
+}: TraitBadgeProps) {
   const active = trait.thresholds.length > 0 && count >= trait.thresholds[0];
   const info = nextThresholdInfo(trait, count);
 
@@ -50,6 +58,19 @@ export default function TraitBadge({ trait, count, emblemCount = 0, luxAssisted 
       </div>
 
       <ProgressBar value={info.progress} color={active ? '#C9A96E' : '#4A5568'} />
+
+      {contributors.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {contributors.map((label) => (
+            <span
+              key={label}
+              className="rounded bg-ink px-1.5 py-0.5 text-[10px] text-secondary"
+            >
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

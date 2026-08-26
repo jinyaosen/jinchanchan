@@ -143,6 +143,9 @@ export default function InputPanel() {
           onChange={(e) => updateConfig({ population: Number(e.target.value) })}
           className="w-full"
         />
+        <p className="text-[10px] text-disabled">
+          「质量最强」按费用曲线：≤7 主 3 费，8 少量 5 费，9 大量 5 费，10+ 主 4/5 费；「羁绊最多」不受费用限制，可用低费卡凑羁绊。锁定英雄均不受限。
+        </p>
       </div>
 
       {/* 转职纹章数量 + 可用转职 */}

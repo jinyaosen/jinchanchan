@@ -12,7 +12,7 @@ export async function runSolver(
   onProgress: (p: SolverProgress) => void,
   isCancelled: () => boolean,
 ): Promise<SolverResult> {
-  const data = prepareSolverData(request.champions, request.traits, request.config);
+  const data = prepareSolverData(request.champions, request.traits, request.config, request.mode);
 
   // 锁定英雄总人口超限时直接报错，由主线程展示。
   if (data.remainingPopulation < 0) {

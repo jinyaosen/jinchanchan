@@ -232,7 +232,21 @@
       1
     ],
     "hasEmblem": false,
-    "emblemName": ""
+    "emblemName": "",
+    "effect": {
+      "description": "拉克丝登场时，从以下羁绊中随机选择一个获得双倍计数",
+      "targetTraits": [
+        "灵魂莲华",
+        "地狱火",
+        "永恒之森",
+        "黑荆棘",
+        "花仙子",
+        "野兽之灵",
+        "日食",
+        "月食",
+        "魔女"
+      ]
+    }
   },
   {
     "id": "apexpredator",

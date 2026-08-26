@@ -1,5 +1,6 @@
 import type { Champion, GameConfig, SolverMode, SolverResult, Trait } from '../data/types';
 import { encodeTraits, maskOf, popcount } from '../utils/bitmask';
+import { getCostPolicy } from '../utils/costPolicy';
 import { computeQualityScores } from '../utils/scoring';
 import { findLux, getLuxDoubleTargets, isLux } from '../utils/luxEffect';
 
@@ -33,6 +34,8 @@ export interface SolverData {
   emblemCounts: Uint8Array;
   /** 已选择的纹章总数 */
   selectedEmblemTotal: number;
+  /** 非锁定英雄中 5 费英雄的最大数量（Infinity 表示不限制） */
+  maxFiveCost: number;
   heroGeneralIndices: number[][];
   heroMasks: bigint[];
   heroSlots: Uint8Array;
@@ -44,18 +47,23 @@ export function prepareSolverData(
   champions: Champion[],
   traits: Trait[],
   config: GameConfig,
+  mode: SolverMode = 'maxTraits',
 ): SolverData {
   const traitByName = new Map(traits.map((t) => [t.name, t]));
   const generalTraits = traits.filter((t) => t.type === 'general');
   const traitIndex = new Map(generalTraits.map((t, i) => [t.name, i]));
 
   const locked = new Set(config.lockedHeroIds);
+  const policy = getCostPolicy(config.population);
+  // 「羁绊最多」只追求羁绊数量，允许低费卡；「质量最强」才应用费用曲线。
+  const enforceCostPolicy = mode === 'maxQuality';
 
   const lockedHeroes = champions.filter((c) => locked.has(c.id));
   const lockedSlots = lockedHeroes.reduce((s, c) => s + c.slots, 0);
 
   const candidates = champions
     .filter((c) => !locked.has(c.id))
+    .filter((c) => !enforceCostPolicy || (c.cost >= policy.minCost && c.cost <= policy.maxCost))
     .map((c) => {
       const generalIndices = c.traits
         .filter((name) => traitIndex.has(name))
@@ -74,9 +82,11 @@ export function prepareSolverData(
   const heroMasks = heroGeneralIndices.map((idx) => encodeTraits(idx));
   const heroSlots = Uint8Array.from(candidates.map((c) => c.champion.slots));
   const heroCosts = Uint8Array.from(candidates.map((c) => c.champion.cost));
-  const heroSignatures = candidates.map(
-    (c) => `${c.champion.cost}|${[...c.generalIndices].sort((x, y) => x - y).join(',')}`,
-  );
+  const heroSignatures = candidates.map((c) => {
+    const base = `${c.champion.cost}|${[...c.generalIndices].sort((x, y) => x - y).join(',')}`;
+    // 拉克丝的大元素使双倍效果会改变目标函数，不能与其它「无 general 羁绊」英雄做对称剪枝。
+    return isLux(c.champion) ? `${base}|lux` : base;
+  });
 
   const lux = findLux(champions);
   const luxAvailable = lux
@@ -115,6 +125,7 @@ export function prepareSolverData(
     luxDoubleTargets,
     emblemCounts,
     selectedEmblemTotal,
+    maxFiveCost: enforceCostPolicy ? policy.maxFiveCost : Number.POSITIVE_INFINITY,
     heroGeneralIndices,
     heroMasks,
     heroSlots,
@@ -173,7 +184,7 @@ export function applyEmblems(counts: Uint8Array, emblemCounts: Uint8Array): Uint
   return next;
 }
 
-/** 若拉克丝在阵容中且指定双倍羁绊，则对基础计数叠加 +1（返回新数组，不修改原数组） */
+/** 若拉克丝在阵容中且指定双倍羁绊，则对该羁绊计数贡献 +2（返回新数组，不修改原数组） */
 export function applyLuxDouble(
   counts: Uint8Array,
   data: SolverData,
@@ -183,7 +194,7 @@ export function applyLuxDouble(
   const next = counts.slice();
   if (!luxSelected || !luxDoubleTrait || luxDoubleTrait === '') return next;
   const idx = data.traitIndex.get(luxDoubleTrait);
-  if (idx !== undefined) next[idx] += 1;
+  if (idx !== undefined) next[idx] += 2;
   return next;
 }
 

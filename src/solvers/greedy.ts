@@ -16,6 +16,7 @@ export function greedySolve(data: SolverData, mode: SolverMode): SolverResult {
   let heroes = [...data.lockedHeroes];
   let counts = buildCountsFromHeroes(heroes, data);
   let used = data.lockedSlots;
+  let fiveCost = 0;
   let best = evaluateBest(data, heroes, counts, mode, false, true);
 
   let improved = true;
@@ -28,6 +29,7 @@ export function greedySolve(data: SolverData, mode: SolverMode): SolverResult {
     for (let i = 0; i < data.candidates.length; i += 1) {
       if (selectedIndices.includes(i)) continue;
       if (used + data.heroSlots[i] > data.population) continue;
+      if (data.heroCosts[i] === 5 && fiveCost >= data.maxFiveCost) continue;
 
       const nextCounts = counts.slice();
       for (const t of data.heroGeneralIndices[i]) nextCounts[t] += 1;
@@ -46,6 +48,7 @@ export function greedySolve(data: SolverData, mode: SolverMode): SolverResult {
       heroes = [...heroes, data.candidates[bestIndex]];
       counts = bestCounts;
       used += data.heroSlots[bestIndex];
+      if (data.heroCosts[bestIndex] === 5) fiveCost += 1;
       best = bestCandidate;
       improved = true;
     }

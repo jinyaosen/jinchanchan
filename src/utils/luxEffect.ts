@@ -2,7 +2,7 @@ import type { Champion, Trait } from '../data/types';
 
 /**
  * 拉克丝「大元素使」特效处理。
- * 拉克丝登场时，可选择一个 targetTraits 中的 general 羁绊获得双倍计数（+1 额外）。
+ * 拉克丝登场时，可选择一个 targetTraits 中的 general 羁绊获得双倍计数（该羁绊贡献 2 点）。
  */
 
 export const LUX_ELEMENTALIST_NAME = '大元素使';

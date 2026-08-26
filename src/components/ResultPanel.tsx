@@ -2,7 +2,7 @@ import { Lock } from 'lucide-react';
 import type { Champion, Trait } from '../data/types';
 import { useGameStore } from '../store/gameStore';
 import { startSolve } from '../solvers/workerClient';
-import { findLux } from '../utils/luxEffect';
+import { findLux, isLux } from '../utils/luxEffect';
 import { costColor } from '../utils/theme';
 import HeroCard from './HeroCard';
 import TraitBadge from './TraitBadge';
@@ -79,16 +79,39 @@ export default function ResultPanel() {
         </div>
 
         <div className="mt-4 rounded-lg border border-line bg-ink/50 p-3">
-          <div className="mb-2 text-xs font-semibold text-secondary">英雄构成</div>
+          <div className="mb-2 text-xs font-semibold text-secondary">英雄构成（含羁绊）</div>
           <div className="flex flex-wrap gap-2">
-            {result.heroes.map((hero) => (
-              <div key={hero.id} className="rounded-lg border border-line bg-panel px-2 py-1">
-                <span className="text-xs font-semibold text-primary">{hero.name}</span>
-                <span className="ml-1 text-[10px]" style={{ color: costColor(hero.cost) }}>
-                  {hero.cost}费
-                </span>
-              </div>
-            ))}
+            {result.heroes.map((hero) => {
+              const doubleTrait = isLux(hero) ? result.luxDoubleTrait : null;
+              const generalTraits = hero.traits.filter(
+                (name) => traitByName.get(name)?.type === 'general',
+              );
+              const displayTraits =
+                doubleTrait && !generalTraits.includes(doubleTrait)
+                  ? [...generalTraits, doubleTrait]
+                  : generalTraits;
+              return (
+                <div key={hero.id} className="rounded-lg border border-line bg-panel px-2 py-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs font-semibold text-primary">{hero.name}</span>
+                    <span className="text-[10px]" style={{ color: costColor(hero.cost) }}>
+                      {hero.cost}费
+                    </span>
+                    {doubleTrait && (
+                      <span className="lux-text text-[9px] font-bold">双·{doubleTrait}</span>
+                    )}
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {displayTraits.map((name) => (
+                      <span key={name} className="rounded bg-ink px-1 py-0.5 text-[9px] text-secondary">
+                        {name}
+                        {name === doubleTrait && <span className="lux-text font-bold"> ×2</span>}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <div className="mt-2 text-[11px] text-secondary">
             费用构成：
@@ -129,13 +152,29 @@ export default function ResultPanel() {
           {result.activeTraits.map((name) => {
             const trait = traitByName.get(name) as Trait | undefined;
             if (!trait) return null;
+
+            const contributors = result.heroes
+              .filter((hero) => hero.traits.includes(name))
+              .map((hero) => hero.name);
+            if (result.luxDoubleTrait === name) {
+              const luxName = lux?.name ?? '拉克丝';
+              if (contributors.includes(luxName)) {
+                contributors[contributors.indexOf(luxName)] = `${luxName}×2`;
+              } else {
+                contributors.push(`${luxName}·双倍`);
+              }
+            }
+            const emblemCount = result.emblemAllocations[name] ?? 0;
+            if (emblemCount > 0) contributors.push(`转职×${emblemCount}`);
+
             return (
               <TraitBadge
                 key={name}
                 trait={trait}
                 count={result.traitCounts[name] ?? 0}
-                emblemCount={result.emblemAllocations[name] ?? 0}
+                emblemCount={emblemCount}
                 luxAssisted={result.luxDoubleTrait === name}
+                contributors={contributors}
               />
             );
           })}

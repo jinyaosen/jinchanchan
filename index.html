@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>金铲铲 S18 拼羁绊海克斯辅助工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind Play CDN 基础配置：关闭 preflight 的字体重置冲突，仅保留暗色基础。
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              ink: '#0B0E14',
+              panel: '#151A24',
+              line: '#2A3142',
+              gold: '#C9A96E',
+              primary: '#E8EAED',
+              secondary: '#8B92A8',
+              disabled: '#4A5568',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

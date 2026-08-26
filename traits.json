@@ -1,0 +1,377 @@
+[
+  {
+    "id": "spirit",
+    "name": "灵魂莲华",
+    "thresholds": [
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "hasEmblem": true,
+    "emblemName": "灵魂莲华纹章"
+  },
+  {
+    "id": "inferno",
+    "name": "地狱火",
+    "thresholds": [
+      2,
+      3,
+      5,
+      7
+    ],
+    "hasEmblem": true,
+    "emblemName": "地狱火纹章"
+  },
+  {
+    "id": "yordle",
+    "name": "约德尔人",
+    "thresholds": [
+      3,
+      5,
+      7
+    ],
+    "hasEmblem": true,
+    "emblemName": "约德尔人纹章"
+  },
+  {
+    "id": "elderwood",
+    "name": "永恒之森",
+    "thresholds": [
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "hasEmblem": true,
+    "emblemName": "永恒之森纹章"
+  },
+  {
+    "id": "blackthorn",
+    "name": "黑荆棘",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "黑荆棘纹章"
+  },
+  {
+    "id": "jungle",
+    "name": "峡谷野怪",
+    "thresholds": [
+      3,
+      5,
+      7,
+      10
+    ],
+    "hasEmblem": true,
+    "emblemName": "峡谷野怪纹章"
+  },
+  {
+    "id": "nemesis",
+    "name": "宿敌",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": true,
+    "emblemName": "宿敌纹章"
+  },
+  {
+    "id": "faerie",
+    "name": "花仙子",
+    "thresholds": [
+      2,
+      4
+    ],
+    "hasEmblem": true,
+    "emblemName": "花仙子纹章"
+  },
+  {
+    "id": "bestial",
+    "name": "野兽之灵",
+    "thresholds": [
+      2,
+      4
+    ],
+    "hasEmblem": true,
+    "emblemName": "野兽之灵纹章"
+  },
+  {
+    "id": "deathblossom",
+    "name": "绝命花妖",
+    "thresholds": [
+      1,
+      2
+    ],
+    "hasEmblem": true,
+    "emblemName": "绝命花妖纹章"
+  },
+  {
+    "id": "solar",
+    "name": "日食",
+    "thresholds": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "hasEmblem": true,
+    "emblemName": "日食纹章"
+  },
+  {
+    "id": "lunar",
+    "name": "月食",
+    "thresholds": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "hasEmblem": true,
+    "emblemName": "月食纹章"
+  },
+  {
+    "id": "eclipse",
+    "name": "日月双蚀",
+    "thresholds": [],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "witch",
+    "name": "魔女",
+    "thresholds": [
+      3,
+      4,
+      5,
+      7
+    ],
+    "hasEmblem": true,
+    "emblemName": "魔女纹章"
+  },
+  {
+    "id": "monarch",
+    "name": "帝王斑蝶",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "monolith",
+    "name": "魔岩巨兽",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "huntress",
+    "name": "狂野女猎手",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "gemknight",
+    "name": "宝石骑士",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "ancientspirit",
+    "name": "远古树精",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "greenfather",
+    "name": "翠神",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "moonpriestess",
+    "name": "月华神女",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "bountyhunter",
+    "name": "赏金猎人",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "elementalist",
+    "name": "大元素使",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "apexpredator",
+    "name": "顶级掠食者",
+    "thresholds": [
+      1
+    ],
+    "hasEmblem": false,
+    "emblemName": ""
+  },
+  {
+    "id": "mage",
+    "name": "法师",
+    "thresholds": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "hasEmblem": true,
+    "emblemName": "法师纹章"
+  },
+  {
+    "id": "spellblade",
+    "name": "魔战士",
+    "thresholds": [
+      2,
+      4
+    ],
+    "hasEmblem": true,
+    "emblemName": "魔战士纹章"
+  },
+  {
+    "id": "berserker",
+    "name": "狂战士",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "狂战士纹章"
+  },
+  {
+    "id": "bruiser",
+    "name": "斗士",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "斗士纹章"
+  },
+  {
+    "id": "rapidfire",
+    "name": "迅捷射手",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "迅捷射手纹章"
+  },
+  {
+    "id": "hunter",
+    "name": "猎手",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "猎手纹章"
+  },
+  {
+    "id": "judge",
+    "name": "裁决使",
+    "thresholds": [
+      2,
+      3
+    ],
+    "hasEmblem": true,
+    "emblemName": "裁决使纹章"
+  },
+  {
+    "id": "summoner",
+    "name": "召唤使",
+    "thresholds": [
+      2,
+      4
+    ],
+    "hasEmblem": true,
+    "emblemName": "召唤使纹章"
+  },
+  {
+    "id": "heavy",
+    "name": "重装战士",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "重装战士纹章"
+  },
+  {
+    "id": "guardian",
+    "name": "护卫",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "护卫纹章"
+  },
+  {
+    "id": "dominator",
+    "name": "主宰",
+    "thresholds": [
+      2,
+      4,
+      6
+    ],
+    "hasEmblem": true,
+    "emblemName": "主宰纹章"
+  },
+  {
+    "id": "oracle",
+    "name": "神谕者",
+    "thresholds": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "hasEmblem": true,
+    "emblemName": "神谕者纹章"
+  }
+]

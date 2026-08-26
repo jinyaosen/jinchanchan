@@ -1,0 +1,735 @@
+[
+  {
+    "id": "karma",
+    "name": "卡尔玛",
+    "cost": 1,
+    "traits": [
+      "灵魂莲华",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "veigar",
+    "name": "维迦",
+    "cost": 1,
+    "traits": [
+      "黑荆棘",
+      "约德尔人",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "yorick",
+    "name": "约里克",
+    "cost": 1,
+    "traits": [
+      "灵魂莲华",
+      "主宰",
+      "召唤使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "akali",
+    "name": "阿卡丽",
+    "cost": 1,
+    "traits": [
+      "地狱火",
+      "魔战士",
+      "狂战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "leona",
+    "name": "蕾欧娜",
+    "cost": 1,
+    "traits": [
+      "日食",
+      "护卫"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "varus",
+    "name": "韦鲁斯",
+    "cost": 1,
+    "traits": [
+      "地狱火",
+      "迅捷射手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "camille",
+    "name": "卡蜜尔",
+    "cost": 1,
+    "traits": [
+      "魔女",
+      "狂战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "reksai",
+    "name": "雷克塞",
+    "cost": 1,
+    "traits": [
+      "黑荆棘",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "rakan",
+    "name": "洛",
+    "cost": 1,
+    "traits": [
+      "花仙子",
+      "重装战士",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "xayah",
+    "name": "霞",
+    "cost": 1,
+    "traits": [
+      "永恒之森",
+      "花仙子",
+      "迅捷射手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "ornn",
+    "name": "奥恩",
+    "cost": 1,
+    "traits": [
+      "永恒之森",
+      "护卫"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "kekubo",
+    "name": "可酷伯",
+    "cost": 1,
+    "traits": [
+      "约德尔人",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "zhuling",
+    "name": "驻灵",
+    "cost": 1,
+    "traits": [
+      "峡谷野怪",
+      "神谕者"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "feihongshuguai",
+    "name": "绯红树怪",
+    "cost": 1,
+    "traits": [
+      "峡谷野怪",
+      "猎手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "leblanc",
+    "name": "乐芙兰",
+    "cost": 2,
+    "traits": [
+      "永恒之森",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "kayle",
+    "name": "凯尔",
+    "cost": 2,
+    "traits": [
+      "日食",
+      "迅捷射手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "alistar",
+    "name": "阿利斯塔",
+    "cost": 2,
+    "traits": [
+      "永恒之森",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "teemo",
+    "name": "提莫",
+    "cost": 2,
+    "traits": [
+      "约德尔人",
+      "神谕者"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "warwick",
+    "name": "沃里克",
+    "cost": 2,
+    "traits": [
+      "黑荆棘",
+      "狂战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "caitlyn",
+    "name": "凯特琳",
+    "cost": 2,
+    "traits": [
+      "魔女",
+      "猎手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "elise",
+    "name": "伊莉丝",
+    "cost": 2,
+    "traits": [
+      "魔女",
+      "重装战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "shen",
+    "name": "慎",
+    "cost": 2,
+    "traits": [
+      "地狱火",
+      "护卫"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "sejuani",
+    "name": "瑟庄妮",
+    "cost": 2,
+    "traits": [
+      "日食",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "yunana",
+    "name": "芸阿娜",
+    "cost": 2,
+    "traits": [
+      "灵魂莲华",
+      "裁决使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "mozhaowa",
+    "name": "魔沼蛙",
+    "cost": 2,
+    "traits": [
+      "峡谷野怪",
+      "魔战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "anyinglang",
+    "name": "暗影狼",
+    "cost": 2,
+    "traits": [
+      "峡谷野怪",
+      "狂战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "xunjiexie",
+    "name": "迅捷蟹",
+    "cost": 2,
+    "traits": [
+      "峡谷野怪",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "fiddlesticks",
+    "name": "费德提克",
+    "cost": 3,
+    "traits": [
+      "绝命花妖",
+      "护卫",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "yi",
+    "name": "易",
+    "cost": 3,
+    "traits": [
+      "灵魂莲华",
+      "魔战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "tristana",
+    "name": "崔丝塔娜",
+    "cost": 3,
+    "traits": [
+      "约德尔人",
+      "花仙子",
+      "猎手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "rammus",
+    "name": "拉莫斯",
+    "cost": 3,
+    "traits": [
+      "约德尔人",
+      "护卫"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "cassiopeia",
+    "name": "卡西奥佩娅",
+    "cost": 3,
+    "traits": [
+      "魔女",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "kogmaw",
+    "name": "克格莫",
+    "cost": 3,
+    "traits": [
+      "帝王斑蝶",
+      "魔战士",
+      "神谕者"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "rengar",
+    "name": "雷恩加尔",
+    "cost": 3,
+    "traits": [
+      "宿敌"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "hecarim",
+    "name": "赫卡里姆",
+    "cost": 3,
+    "traits": [
+      "永恒之森",
+      "重装战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "khazix",
+    "name": "卡兹克",
+    "cost": 3,
+    "traits": [
+      "宿敌"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "diana",
+    "name": "黛安娜",
+    "cost": 3,
+    "traits": [
+      "月食",
+      "狂战士",
+      "重装战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "vi",
+    "name": "蔚",
+    "cost": 3,
+    "traits": [
+      "野兽之灵",
+      "护卫",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "azir",
+    "name": "阿兹尔",
+    "cost": 3,
+    "traits": [
+      "黑荆棘",
+      "裁决使",
+      "召唤使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "shijiachong",
+    "name": "石甲虫",
+    "cost": 3,
+    "traits": [
+      "峡谷野怪",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "fenghuiniao",
+    "name": "锋喙鸟",
+    "cost": 3,
+    "traits": [
+      "峡谷野怪",
+      "迅捷射手",
+      "召唤使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "sivir",
+    "name": "希维尔",
+    "cost": 4,
+    "traits": [
+      "野兽之灵",
+      "猎手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "soraka",
+    "name": "索拉卡",
+    "cost": 4,
+    "traits": [
+      "绝命花妖",
+      "裁决使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "morgana",
+    "name": "莫甘娜",
+    "cost": 4,
+    "traits": [
+      "魔女",
+      "神谕者"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "amumu",
+    "name": "阿木木",
+    "cost": 4,
+    "traits": [
+      "地狱火",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "malphite",
+    "name": "墨菲特",
+    "cost": 4,
+    "traits": [
+      "黑荆棘",
+      "魔岩巨兽"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "nidalee",
+    "name": "奈德丽",
+    "cost": 4,
+    "traits": [
+      "狂野女猎手",
+      "魔战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "ezreal",
+    "name": "伊泽瑞尔",
+    "cost": 4,
+    "traits": [
+      "永恒之森",
+      "裁决使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "ahri",
+    "name": "阿狸",
+    "cost": 4,
+    "traits": [
+      "灵魂莲华",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "zyra",
+    "name": "婕拉",
+    "cost": 4,
+    "traits": [
+      "召唤使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "aphelios",
+    "name": "厄斐琉斯",
+    "cost": 4,
+    "traits": [
+      "月食",
+      "迅捷射手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "sett",
+    "name": "瑟提",
+    "cost": 4,
+    "traits": [
+      "灵魂莲华",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "lillia",
+    "name": "莉莉娅",
+    "cost": 4,
+    "traits": [
+      "花仙子",
+      "护卫"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "feihongyinjishuguai",
+    "name": "绯红印记树怪",
+    "cost": 4,
+    "traits": [
+      "峡谷野怪",
+      "狂战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "canglandiaowenmoxiang",
+    "name": "苍蓝雕纹魔像",
+    "cost": 4,
+    "traits": [
+      "峡谷野怪",
+      "重装战士",
+      "神谕者"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "ashe",
+    "name": "艾希",
+    "cost": 5,
+    "traits": [
+      "灵魂莲华",
+      "猎手"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "taric",
+    "name": "塔里克",
+    "cost": 5,
+    "traits": [
+      "宝石骑士",
+      "重装战士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "maokai",
+    "name": "茂凯",
+    "cost": 5,
+    "traits": [
+      "远古树精",
+      "主宰"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "kennen",
+    "name": "凯南",
+    "cost": 5,
+    "traits": [
+      "地狱火",
+      "裁决使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "lux",
+    "name": "拉克丝",
+    "cost": 5,
+    "traits": [
+      "灵魂莲华",
+      "地狱火",
+      "永恒之森",
+      "黑荆棘",
+      "花仙子",
+      "野兽之灵",
+      "日食",
+      "月食",
+      "魔女",
+      "大元素使"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "draven",
+    "name": "德莱文",
+    "cost": 5,
+    "traits": [
+      "赏金猎人"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "gnar",
+    "name": "纳尔",
+    "cost": 5,
+    "traits": [
+      "约德尔人",
+      "永恒之森",
+      "斗士"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "ivern",
+    "name": "艾翁",
+    "cost": 5,
+    "traits": [
+      "翠神"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "alune",
+    "name": "拉露恩",
+    "cost": 5,
+    "traits": [
+      "月华神女",
+      "月食",
+      "法师"
+    ],
+    "slots": 1,
+    "isChosen": false
+  },
+  {
+    "id": "elderdragon",
+    "name": "远古巨龙",
+    "cost": 5,
+    "traits": [
+      "峡谷野怪",
+      "顶级掠食者"
+    ],
+    "slots": 2,
+    "isChosen": false
+  }
+]

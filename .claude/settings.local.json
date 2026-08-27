@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(npm install)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(git -C \"D:\\\\A_VS_code\\\\projects\\\\jinchanchan\" add .github)",
+      "Bash(git -C \"D:\\\\A_VS_code\\\\projects\\\\jinchanchan\" commit -m \"add github pages deploy\")",
+      "Bash(git -C \"D:\\\\A_VS_code\\\\projects\\\\jinchanchan\" push -u origin main)",
+      "Bash(node:*)",
+      "WebSearch",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix Lux trait counting; add cost curve and contributor display\n\n- Correct Lux to only carry 大元素使 with +2 double count\n- Add population cost policy for maxQuality mode only\n- Show contributing heroes under each active trait\n- Bump store key to clear stale cached data\n- Update README\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)"
     ]
   }
 }

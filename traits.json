@@ -328,7 +328,8 @@
     "name": "裁决使",
     "thresholds": [
       2,
-      3
+      3,
+      4
     ],
     "hasEmblem": true,
     "emblemName": "裁决使纹章"

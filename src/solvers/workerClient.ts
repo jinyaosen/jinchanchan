@@ -5,7 +5,7 @@ import { useGameStore } from '../store/gameStore';
  * 主线程侧 Worker 管理：创建单例 Worker，封装 startSolve / cancelSolve。
  */
 
-const SOLVE_TIME_LIMIT_MS = 3000;
+const SOLVE_TIME_LIMIT_MS = 5000;
 
 let worker: Worker | null = null;
 let currentRequestId: string | null = null;

@@ -42,7 +42,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="text-xl">🔶</span>
             <h1 className="text-sm font-bold text-primary sm:text-base">
-              金铲铲 S18 拼羁绊海克斯辅助
+              金铲铲 S18 羁绊天梯海克斯辅助工具
             </h1>
           </div>
 

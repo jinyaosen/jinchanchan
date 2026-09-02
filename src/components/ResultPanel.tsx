@@ -45,7 +45,10 @@ export default function ResultPanel() {
     list.push(hero);
     heroesByCost.set(hero.cost, list);
   }
-  const sortedCosts = [...heroesByCost.keys()].sort((a, b) => b - a);
+  const sortedHeroes = [...result.heroes].sort(
+    (a, b) => a.cost - b.cost || a.name.localeCompare(b.name),
+  );
+  const sortedCosts = [...heroesByCost.keys()].sort((a, b) => a - b);
   const totalCost = result.heroes.reduce((sum, hero) => sum + hero.cost, 0);
 
   return (
@@ -57,7 +60,7 @@ export default function ResultPanel() {
           <span className="text-xs text-secondary">点击英雄可固定并重算</span>
         </div>
         <div className="flex flex-wrap gap-3">
-          {result.heroes.map((hero) => (
+          {sortedHeroes.map((hero) => (
             <HeroCard
               key={hero.id}
               hero={hero}
@@ -81,7 +84,7 @@ export default function ResultPanel() {
         <div className="mt-4 rounded-lg border border-line bg-ink/50 p-3">
           <div className="mb-2 text-xs font-semibold text-secondary">英雄构成（含羁绊）</div>
           <div className="flex flex-wrap gap-2">
-            {result.heroes.map((hero) => {
+            {sortedHeroes.map((hero) => {
               const doubleTrait = isLux(hero) ? result.luxDoubleTrait : null;
               const generalTraits = hero.traits.filter(
                 (name) => traitByName.get(name)?.type === 'general',

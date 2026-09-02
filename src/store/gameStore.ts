@@ -59,7 +59,7 @@ export const useGameStore = create<GameStore>()(
       setError: (error) => set({ error, isComputing: false }),
     }),
     {
-      name: 'jinchanchan-s18-store-v2',
+      name: 'jinchanchan-s18-store-v3',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         champions: state.champions,

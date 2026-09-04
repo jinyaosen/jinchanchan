@@ -1,10 +1,10 @@
-import type { SolverMode, SolverResult } from '../data/types';
+import type { SolverResult } from '../data/types';
 import { costColor } from './theme';
 
 /**
  * 将当前阵容导出为 PNG。使用原生 Canvas 绘制，避免引入 html2canvas 依赖。
  */
-export function exportResultAsPng(result: SolverResult, mode: SolverMode): void {
+export function exportResultAsPng(result: SolverResult): void {
   const canvas = document.createElement('canvas');
   canvas.width = 1200;
   canvas.height = 800;
@@ -18,15 +18,11 @@ export function exportResultAsPng(result: SolverResult, mode: SolverMode): void 
   // 标题
   ctx.fillStyle = '#E8EAED';
   ctx.font = 'bold 34px "Microsoft YaHei", sans-serif';
-  ctx.fillText(mode === 'maxTraits' ? '羁绊数量最大化阵容' : '阵容质量最强阵容', 48, 70);
+  ctx.fillText('羁绊数量最大化阵容', 48, 70);
 
   ctx.fillStyle = '#8B92A8';
   ctx.font = '20px "Microsoft YaHei", sans-serif';
   ctx.fillText(`人口占用 ${result.usedPopulation}`, 48, 110);
-  if (mode === 'maxQuality' && result.qualityScore != null) {
-    ctx.fillStyle = '#C9A96E';
-    ctx.fillText(`质量分 ${result.qualityScore}`, 240, 110);
-  }
 
   // 英雄卡片
   const heroY = 170;

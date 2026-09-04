@@ -114,10 +114,7 @@
     "id": "solar",
     "name": "日食",
     "thresholds": [
-      2,
-      3,
-      4,
-      5
+      3
     ],
     "hasEmblem": true,
     "emblemName": "日食纹章"

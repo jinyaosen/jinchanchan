@@ -1,4 +1,4 @@
-import type { SolverMode, SolverProgress, SolverResult } from '../data/types';
+import type { SolverProgress, SolverResult } from '../data/types';
 import {
   activeMaskFromCounts,
   activeTraitCountFromCounts,
@@ -23,11 +23,10 @@ export async function solveMaxTraits(
   isCancelled: () => boolean,
   timeLimitMs: number,
 ): Promise<SolverResult> {
-  const mode: SolverMode = 'maxTraits';
   const runtime = new Runtime(timeLimitMs, isCancelled, onProgress);
 
   // Phase 1：贪心快速解
-  let best = greedySolve(data, mode);
+  let best = greedySolve(data);
   runtime.report('greedy', 0.08, `贪心初始解：${best.activeTraits.length} 个羁绊`, best);
 
   // Phase 2：回溯分支定界
@@ -58,7 +57,6 @@ async function backtrackA(
     counts: Uint8Array,
     used: number,
     selectedHeroes: (typeof data.candidates)[number][],
-    fiveCost: number,
   ): Promise<void> => {
     await runtime.tick();
     if (runtime.shouldStop()) return;
@@ -74,8 +72,8 @@ async function backtrackA(
     if (upperBound <= best.activeTraits.length) return;
 
     // 该节点有潜力，才做完整评估（含转职分配与拉克丝双倍自动选择）
-    const result = evaluateBest(data, selectedHeroes, counts, 'maxTraits');
-    if (resultIsBetter(best, result, 'maxTraits')) {
+    const result = evaluateBest(data, selectedHeroes, counts);
+    if (resultIsBetter(best, result)) {
       best = result;
       runtime.report(
         'backtrack',
@@ -89,19 +87,12 @@ async function backtrackA(
     for (let i = start; i < n; i += 1) {
       if (used + data.heroSlots[i] > data.population) continue;
       if (i > start && data.heroSignatures[i] === data.heroSignatures[i - 1]) continue;
-      if (data.heroCosts[i] === 5 && fiveCost >= data.maxFiveCost) continue;
 
       const hero = data.candidates[i];
       for (const t of data.heroGeneralIndices[i]) counts[t] += 1;
       selectedHeroes.push(hero);
 
-      await dfs(
-        i + 1,
-        counts,
-        used + data.heroSlots[i],
-        selectedHeroes,
-        fiveCost + (data.heroCosts[i] === 5 ? 1 : 0),
-      );
+      await dfs(i + 1, counts, used + data.heroSlots[i], selectedHeroes);
 
       selectedHeroes.pop();
       for (const t of data.heroGeneralIndices[i]) counts[t] -= 1;
@@ -110,7 +101,7 @@ async function backtrackA(
     }
   };
 
-  await dfs(0, baseCounts, data.lockedSlots, [...data.lockedHeroes], 0);
+  await dfs(0, baseCounts, data.lockedSlots, [...data.lockedHeroes]);
   return best;
 }
 
@@ -129,12 +120,10 @@ function localSearchA(data: SolverData, initial: SolverResult, runtime: Runtime)
         if (runtime.shouldStop()) return current;
         const newHeroes = current.heroes.filter((h) => h.id !== inHero.id).concat(outHero);
         if (newHeroes.reduce((s, h) => s + h.slots, 0) > data.population) continue;
-        const newFiveCost = newHeroes.filter((h) => !lockedIds.has(h.id) && h.cost === 5).length;
-        if (newFiveCost > data.maxFiveCost) continue;
 
         const counts = buildCountsFromHeroes(newHeroes, data);
-        const candidate = evaluateBest(data, newHeroes, counts, 'maxTraits');
-        if (resultIsBetter(current, candidate, 'maxTraits')) {
+        const candidate = evaluateBest(data, newHeroes, counts);
+        if (resultIsBetter(current, candidate)) {
           current = candidate;
           improved = true;
           break outer;

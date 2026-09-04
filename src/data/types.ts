@@ -28,22 +28,18 @@ export interface Trait {
   effect?: TraitEffect;
 }
 
-export type SolverMode = 'maxTraits' | 'maxQuality';
-
 export interface GameConfig {
   population: number; // 1~15
   emblemCount: number; // 0~10，纹章总数上限
   /** 拉克丝双倍羁绊名：null=自动最优，''=不触发，其它=指定羁绊名 */
   luxDoubleTrait: string | null;
+  /** 是否启用卡兹克（启用后强制上场，并应用进化获得的额外羁绊） */
+  includeKhazix: boolean;
+  /** 卡兹克击杀进化获得的额外羁绊列表（可多选，来自裁决使/迅捷射手/狂战士/法师） */
+  khazixEvolvedTraits: string[];
   lockedHeroIds: string[];
   /** 用户实际拥有的各类型纹章数量，键为羁绊 name，值为数量（总和 ≤ emblemCount） */
   emblemChoices: Record<string, number>;
-}
-
-export interface ScoreBreakdown {
-  costScore: number;
-  traitScore: number;
-  bonusScore: number;
 }
 
 export interface InactiveTrait {
@@ -65,11 +61,53 @@ export interface SolverResult {
   inactiveTraits: InactiveTrait[];
   /** 实际使用的拉克丝双倍羁绊名（自动选择时返回选中的那个） */
   luxDoubleTrait: string | null;
-  qualityScore?: number;
-  scoreBreakdown?: ScoreBreakdown;
   unusedEmblems?: number;
   timedOut?: boolean;
   approximate?: boolean;
+}
+
+export interface HeroChange {
+  /** 本档相对上一档新增的英雄 */
+  added: Champion[];
+  /** 本档相对上一档移除的英雄 */
+  removed: Champion[];
+  /** 替换提示（移除 -> 新增） */
+  replacements: { out: Champion; in: Champion }[];
+}
+
+export interface KhazixEvolutionState {
+  /** 已进化羁绊数量（0~4） */
+  count: number;
+  /** 已进化获得的羁绊名列表 */
+  traits: string[];
+  /** 当前达到的击杀阈值（8/30/60/100），未进化或已满时为 null */
+  killsThreshold: number | null;
+}
+
+export interface PopulationStep {
+  population: number;
+  /** 用于查费用曲线的等级（人口自动映射，人口 >10 时按 10 处理） */
+  level: number;
+  /** 本档允许的最高英雄费用 */
+  maxCost: number;
+  result: SolverResult;
+  changes: HeroChange;
+  /** 卡兹克进化信息（仅启用卡兹克时存在） */
+  khazixEvolutions?: KhazixEvolutionState;
+}
+
+export interface PopulationPlan {
+  startPopulation: number;
+  targetPopulation: number;
+  steps: PopulationStep[];
+}
+
+export interface PlanProgress {
+  step: number;
+  totalSteps: number;
+  /** 0~1 */
+  progress: number;
+  message?: string;
 }
 
 export interface SolverProgress {
@@ -80,9 +118,8 @@ export interface SolverProgress {
 }
 
 export interface WorkerRequest {
-  type: 'solve';
+  type: 'solve' | 'plan';
   requestId: string;
-  mode: SolverMode;
   champions: Champion[];
   traits: Trait[];
   config: GameConfig;
@@ -92,5 +129,10 @@ export interface WorkerRequest {
 export interface WorkerResponse {
   type: 'progress' | 'result' | 'error';
   requestId: string;
-  payload: SolverProgress | SolverResult | { message: string };
+  payload:
+    | SolverProgress
+    | SolverResult
+    | PlanProgress
+    | PopulationPlan
+    | { message: string };
 }

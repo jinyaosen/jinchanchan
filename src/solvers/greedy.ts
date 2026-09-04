@@ -1,4 +1,4 @@
-import type { SolverMode, SolverResult } from '../data/types';
+import type { SolverResult } from '../data/types';
 import {
   buildCountsFromHeroes,
   evaluateBest,
@@ -11,13 +11,12 @@ import {
  * 采用 best-first 贪心：每次从未选英雄中挑一个使目标函数提升最大的加入，
  * 直到无法提升或人口已满。用于给回溯提供较好的初始下界，并立即展示近似解。
  */
-export function greedySolve(data: SolverData, mode: SolverMode): SolverResult {
+export function greedySolve(data: SolverData): SolverResult {
   let selectedIndices: number[] = [];
   let heroes = [...data.lockedHeroes];
   let counts = buildCountsFromHeroes(heroes, data);
   let used = data.lockedSlots;
-  let fiveCost = 0;
-  let best = evaluateBest(data, heroes, counts, mode, false, true);
+  let best = evaluateBest(data, heroes, counts, false, true);
 
   let improved = true;
   while (improved) {
@@ -29,26 +28,24 @@ export function greedySolve(data: SolverData, mode: SolverMode): SolverResult {
     for (let i = 0; i < data.candidates.length; i += 1) {
       if (selectedIndices.includes(i)) continue;
       if (used + data.heroSlots[i] > data.population) continue;
-      if (data.heroCosts[i] === 5 && fiveCost >= data.maxFiveCost) continue;
 
       const nextCounts = counts.slice();
       for (const t of data.heroGeneralIndices[i]) nextCounts[t] += 1;
       const nextHeroes = [...heroes, data.candidates[i]];
-      const candidate = evaluateBest(data, nextHeroes, nextCounts, mode, false, true);
+      const candidate = evaluateBest(data, nextHeroes, nextCounts, false, true);
 
-      if (resultIsBetter(bestCandidate, candidate, mode)) {
+      if (resultIsBetter(bestCandidate, candidate)) {
         bestCandidate = candidate;
         bestIndex = i;
         bestCounts = nextCounts;
       }
     }
 
-    if (bestIndex >= 0 && resultIsBetter(best, bestCandidate, mode)) {
+    if (bestIndex >= 0 && resultIsBetter(best, bestCandidate)) {
       selectedIndices.push(bestIndex);
       heroes = [...heroes, data.candidates[bestIndex]];
       counts = bestCounts;
       used += data.heroSlots[bestIndex];
-      if (data.heroCosts[bestIndex] === 5) fiveCost += 1;
       best = bestCandidate;
       improved = true;
     }

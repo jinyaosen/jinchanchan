@@ -1,8 +1,7 @@
-import type { Champion, GameConfig, SolverMode, SolverResult, Trait } from '../data/types';
+import type { Champion, GameConfig, SolverResult, Trait } from '../data/types';
 import { encodeTraits, maskOf, popcount } from '../utils/bitmask';
-import { getCostPolicy } from '../utils/costPolicy';
-import { computeQualityScores } from '../utils/scoring';
 import { findLux, getLuxDoubleTargets, isLux } from '../utils/luxEffect';
+import { findKhazix } from '../utils/khazix';
 
 /**
  * 求解器共享逻辑：数据预处理、羁绊计数、转职分配、结果组装。
@@ -34,12 +33,9 @@ export interface SolverData {
   emblemCounts: Uint8Array;
   /** 已选择的纹章总数 */
   selectedEmblemTotal: number;
-  /** 非锁定英雄中 5 费英雄的最大数量（Infinity 表示不限制） */
-  maxFiveCost: number;
   heroGeneralIndices: number[][];
   heroMasks: bigint[];
   heroSlots: Uint8Array;
-  heroCosts: Uint8Array;
   heroSignatures: string[];
 }
 
@@ -47,23 +43,35 @@ export function prepareSolverData(
   champions: Champion[],
   traits: Trait[],
   config: GameConfig,
-  mode: SolverMode = 'maxTraits',
 ): SolverData {
   const traitByName = new Map(traits.map((t) => [t.name, t]));
   const generalTraits = traits.filter((t) => t.type === 'general');
   const traitIndex = new Map(generalTraits.map((t, i) => [t.name, i]));
 
   const locked = new Set(config.lockedHeroIds);
-  const policy = getCostPolicy(config.population);
-  // 「羁绊最多」只追求羁绊数量，允许低费卡；「质量最强」才应用费用曲线。
-  const enforceCostPolicy = mode === 'maxQuality';
 
-  const lockedHeroes = champions.filter((c) => locked.has(c.id));
+  // 卡兹克：启用时强制上场，并为其追加击杀进化获得的额外羁绊；未启用时从候选排除。
+  const khazix = findKhazix(champions);
+  let effectiveChampions = champions;
+  if (config.includeKhazix && khazix) {
+    locked.add(khazix.id);
+    const evolvedTraits = (config.khazixEvolvedTraits ?? []).filter(
+      (name) => name && !khazix.traits.includes(name),
+    );
+    if (evolvedTraits.length > 0) {
+      effectiveChampions = champions.map((c) =>
+        c.id === khazix.id ? { ...c, traits: [...c.traits, ...evolvedTraits] } : c,
+      );
+    }
+  } else if (khazix && !locked.has(khazix.id)) {
+    effectiveChampions = effectiveChampions.filter((c) => c.id !== khazix.id);
+  }
+
+  const lockedHeroes = effectiveChampions.filter((c) => locked.has(c.id));
   const lockedSlots = lockedHeroes.reduce((s, c) => s + c.slots, 0);
 
-  const candidates = champions
+  const candidates = effectiveChampions
     .filter((c) => !locked.has(c.id))
-    .filter((c) => !enforceCostPolicy || (c.cost >= policy.minCost && c.cost <= policy.maxCost))
     .map((c) => {
       const generalIndices = c.traits
         .filter((name) => traitIndex.has(name))
@@ -81,19 +89,18 @@ export function prepareSolverData(
   const heroGeneralIndices = candidates.map((c) => c.generalIndices);
   const heroMasks = heroGeneralIndices.map((idx) => encodeTraits(idx));
   const heroSlots = Uint8Array.from(candidates.map((c) => c.champion.slots));
-  const heroCosts = Uint8Array.from(candidates.map((c) => c.champion.cost));
   const heroSignatures = candidates.map((c) => {
     const base = `${c.champion.cost}|${[...c.generalIndices].sort((x, y) => x - y).join(',')}`;
     // 拉克丝的大元素使双倍效果会改变目标函数，不能与其它「无 general 羁绊」英雄做对称剪枝。
     return isLux(c.champion) ? `${base}|lux` : base;
   });
 
-  const lux = findLux(champions);
+  const lux = findLux(effectiveChampions);
   const luxAvailable = lux
     ? lockedHeroes.some((c) => c.id === lux.id) ||
       candidates.some((c) => c.champion.id === lux.id)
     : false;
-  const luxDoubleTargets = getLuxDoubleTargets(traits, champions).filter((name) =>
+  const luxDoubleTargets = getLuxDoubleTargets(traits, effectiveChampions).filter((name) =>
     traitIndex.has(name),
   );
 
@@ -125,11 +132,9 @@ export function prepareSolverData(
     luxDoubleTargets,
     emblemCounts,
     selectedEmblemTotal,
-    maxFiveCost: enforceCostPolicy ? policy.maxFiveCost : Number.POSITIVE_INFINITY,
     heroGeneralIndices,
     heroMasks,
     heroSlots,
-    heroCosts,
     heroSignatures,
   };
 }
@@ -203,14 +208,13 @@ export interface FinalizeInput {
   heroes: Champion[];
   baseCounts: Uint8Array;
   luxDoubleTrait: string | null;
-  mode: SolverMode;
   timedOut: boolean;
   approximate: boolean;
 }
 
 /** 将求解中间状态组装为完整的 SolverResult */
 export function finalizeResult(input: FinalizeInput): SolverResult {
-  const { data, heroes, baseCounts, luxDoubleTrait, mode, timedOut, approximate } = input;
+  const { data, heroes, baseCounts, luxDoubleTrait, timedOut, approximate } = input;
   const luxSelected = heroes.some((h) => isLux(h));
   const doubled = applyLuxDouble(baseCounts, data, luxSelected, luxDoubleTrait);
 
@@ -268,23 +272,6 @@ export function finalizeResult(input: FinalizeInput): SolverResult {
     approximate,
   };
 
-  if (mode === 'maxQuality') {
-    const scores = computeQualityScores(
-      heroes,
-      data.generalTraits,
-      traitCounts,
-      activeTraits.length,
-      usedPopulation,
-      data.population,
-    );
-    result.qualityScore = scores.total;
-    result.scoreBreakdown = {
-      costScore: scores.costScore,
-      traitScore: scores.traitScore,
-      bonusScore: scores.bonusScore,
-    };
-  }
-
   return result;
 }
 
@@ -338,20 +325,13 @@ export function totalCost(heroes: Champion[]): number {
   return heroes.reduce((s, h) => s + h.cost, 0);
 }
 
-/** 比较两个结果：a 比 b 更优时返回 true（模式 A 先比羁绊数再比费用，模式 B 比质量分） */
-export function resultIsBetter(
-  a: SolverResult | null,
-  b: SolverResult,
-  mode: SolverMode,
-): boolean {
+/** 比较两个结果：a 比 b 更优时返回 true（先比羁绊数再比费用） */
+export function resultIsBetter(a: SolverResult | null, b: SolverResult): boolean {
   if (a === null) return true;
-  if (mode === 'maxTraits') {
-    if (b.activeTraits.length !== a.activeTraits.length) {
-      return b.activeTraits.length > a.activeTraits.length;
-    }
-    return totalCost(b.heroes) > totalCost(a.heroes);
+  if (b.activeTraits.length !== a.activeTraits.length) {
+    return b.activeTraits.length > a.activeTraits.length;
   }
-  return (b.qualityScore ?? -1) > (a.qualityScore ?? -1);
+  return totalCost(b.heroes) > totalCost(a.heroes);
 }
 
 /** 给定拉克丝双倍选择，分配转职并组装结果 */
@@ -360,7 +340,6 @@ export function evaluateWithDouble(
   heroes: Champion[],
   baseCounts: Uint8Array,
   luxDoubleTrait: string | null,
-  mode: SolverMode,
   timedOut = false,
   approximate = false,
 ): SolverResult {
@@ -370,7 +349,6 @@ export function evaluateWithDouble(
     heroes,
     baseCounts,
     luxDoubleTrait: luxSelected ? luxDoubleTrait : null,
-    mode,
     timedOut,
     approximate,
   });
@@ -388,19 +366,17 @@ export function evaluateBest(
   data: SolverData,
   heroes: Champion[],
   baseCounts: Uint8Array,
-  mode: SolverMode,
   timedOut = false,
   approximate = false,
 ): SolverResult {
-  const luxDouble = chooseBestLuxDouble(data, heroes, baseCounts, mode);
-  return evaluateWithDouble(data, heroes, baseCounts, luxDouble, mode, timedOut, approximate);
+  const luxDouble = chooseBestLuxDouble(data, heroes, baseCounts);
+  return evaluateWithDouble(data, heroes, baseCounts, luxDouble, timedOut, approximate);
 }
 
 export function chooseBestLuxDouble(
   data: SolverData,
   heroes: Champion[],
   baseCounts: Uint8Array,
-  mode: SolverMode,
 ): string | null {
   if (!heroes.some((h) => isLux(h))) return null;
 
@@ -409,10 +385,10 @@ export function chooseBestLuxDouble(
   if (configured) return configured;
 
   let bestChoice: string | null = null;
-  let bestResult = evaluateWithDouble(data, heroes, baseCounts, null, mode);
+  let bestResult = evaluateWithDouble(data, heroes, baseCounts, null);
   for (const target of data.luxDoubleTargets) {
-    const candidate = evaluateWithDouble(data, heroes, baseCounts, target, mode);
-    if (resultIsBetter(bestResult, candidate, mode)) {
+    const candidate = evaluateWithDouble(data, heroes, baseCounts, target);
+    if (resultIsBetter(bestResult, candidate)) {
       bestResult = candidate;
       bestChoice = target;
     }

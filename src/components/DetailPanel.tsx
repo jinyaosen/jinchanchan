@@ -7,18 +7,15 @@ import {
   prepareSolverData,
   resultIsBetter,
 } from '../solvers/common';
-import QualityBreakdown from './QualityBreakdown';
 
 interface Suggestion {
   inHeroName: string;
   outHeroName: string;
   before: number;
   after: number;
-  metric: 'traits' | 'quality';
 }
 
 export default function DetailPanel() {
-  const mode = useGameStore((s) => s.mode);
   const result = useGameStore((s) => s.result);
   const champions = useGameStore((s) => s.champions);
   const traits = useGameStore((s) => s.traits);
@@ -27,7 +24,7 @@ export default function DetailPanel() {
   const suggestion = useMemo<Suggestion | null>(() => {
     if (!result || champions.length === 0 || traits.length === 0) return null;
     try {
-      const data = prepareSolverData(champions, traits, config, mode);
+      const data = prepareSolverData(champions, traits, config);
       const lockedIds = new Set(data.lockedHeroes.map((h) => h.id));
       const freeSelected = result.heroes.filter((h) => !lockedIds.has(h.id));
       const selectedIds = new Set(result.heroes.map((h) => h.id));
@@ -38,14 +35,13 @@ export default function DetailPanel() {
           const newHeroes = result.heroes.filter((h) => h.id !== inHero.id).concat(outHero);
           if (newHeroes.reduce((s, h) => s + h.slots, 0) > config.population) continue;
           const counts = buildCountsFromHeroes(newHeroes, data);
-          const candidate = evaluateBest(data, newHeroes, counts, mode);
-          if (resultIsBetter(result, candidate, mode)) {
+          const candidate = evaluateBest(data, newHeroes, counts);
+          if (resultIsBetter(result, candidate)) {
             return {
               inHeroName: inHero.name,
               outHeroName: outHero.name,
-              before: mode === 'maxTraits' ? result.activeTraits.length : result.qualityScore ?? 0,
-              after: mode === 'maxTraits' ? candidate.activeTraits.length : candidate.qualityScore ?? 0,
-              metric: mode === 'maxTraits' ? 'traits' : 'quality',
+              before: result.activeTraits.length,
+              after: candidate.activeTraits.length,
             };
           }
         }
@@ -54,15 +50,13 @@ export default function DetailPanel() {
       return null;
     }
     return null;
-  }, [result, champions, traits, config, mode]);
+  }, [result, champions, traits, config]);
 
   const emblems = Object.entries(result?.emblemAllocations ?? {});
   const unusedEmblems = result?.unusedEmblems ?? 0;
 
   return (
     <aside className="space-y-4">
-      {mode === 'maxQuality' && result && <QualityBreakdown result={result} />}
-
       {result && (
         <div className="panel space-y-3 p-4">
           <div className="flex items-center gap-2 text-sm font-bold text-primary">
@@ -118,10 +112,7 @@ export default function DetailPanel() {
           <p className="text-xs leading-relaxed text-primary">
             将 <span className="font-bold text-[#FF6B6B]">{suggestion.inHeroName}</span> 替换为{' '}
             <span className="font-bold text-[#2ECC71]">{suggestion.outHeroName}</span>，
-            {suggestion.metric === 'traits'
-              ? `羁绊数可从 ${suggestion.before} 提升到 ${suggestion.after}`
-              : `质量分可从 ${suggestion.before} 提升到 ${suggestion.after}`}
-            。
+            羁绊数可从 {suggestion.before} 提升到 {suggestion.after}。
           </p>
         </div>
       )}

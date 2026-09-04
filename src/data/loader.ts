@@ -33,7 +33,6 @@ interface RawTrait {
 /** S18 中属于「专属」的羁绊 ID（不计入羁绊数量目标函数） */
 const EXCLUSIVE_TRAIT_IDS = new Set<string>([
   'elementalist', // 大元素使
-  'nemesis', // 宿敌
   'apexpredator', // 顶级掠食者
   'monarch', // 帝王斑蝶
   'monolith', // 魔岩巨兽
@@ -131,6 +130,11 @@ export function parseTraits(input: unknown, champions: Champion[]): Trait[] {
 
     // 用户可选择的纹章羁绊必须是 general，即便原始数据误标为 exclusive 也强制纠正。
     if (EMBLEM_TRAIT_NAMES.includes(name)) {
+      type = 'general';
+    }
+
+    // 宿敌（卡兹克/雷恩加尔自带）必须计入羁绊数量，即便原始数据或旧缓存误标为 exclusive。
+    if (id === 'nemesis' || name === '宿敌') {
       type = 'general';
     }
 

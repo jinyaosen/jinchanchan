@@ -1,10 +1,11 @@
 import { useState, type ReactNode } from 'react';
-import { Lock, Minus, Play, Plus, Search, ShieldCheck, X } from 'lucide-react';
+import { ExternalLink, Lock, Minus, Play, Plus, Search, ShieldCheck, X } from 'lucide-react';
 import type { Champion } from '../data/types';
 import { EMBLEM_TRAIT_NAMES } from '../data/emblemTraits';
 import { useGameStore } from '../store/gameStore';
 import { cancelSolve, startSolve } from '../solvers/workerClient';
 import LuxConfig from './LuxConfig';
+import KhazixConfig from './KhazixConfig';
 import JsonUploader from './JsonUploader';
 import ProgressBar from './ProgressBar';
 
@@ -124,6 +125,32 @@ export default function InputPanel() {
 
   return (
     <aside className="panel space-y-5 p-4">
+      <div className="space-y-1.5 rounded-lg border border-line bg-ink p-3">
+        <div className="text-xs font-semibold text-secondary">官方工具</div>
+        <a
+          href="https://jcc.datatft.com/rate#6"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 text-xs text-secondary hover:text-gold"
+        >
+          <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+          拼盘天梯奖励公布
+        </a>
+        <a
+          href="https://jcc.datatft.com/tracker/s18"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 text-xs text-secondary hover:text-gold"
+        >
+          <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+          官方拼盘天梯辅助
+        </a>
+      </div>
+
+      <p className="text-[10px] leading-relaxed text-disabled">
+        本辅助工具的优点在于有运营规划，当前最优官方工具更优、阵容更多
+      </p>
+
       <div className="flex items-center gap-2">
         <ShieldCheck className="h-5 w-5 text-gold" />
         <h2 className="text-sm font-bold text-primary">输入配置</h2>
@@ -144,10 +171,7 @@ export default function InputPanel() {
           className="w-full"
         />
         <p className="text-[10px] text-disabled">
-          「羁绊最多」不受费用限制，可用低费卡凑羁绊。锁定英雄均不受限。没有终身黄铜阵容强度会很低，或者开完奖励变阵有点吃手速，想吃鸡还是开盗吧。
-        </p>
-        <p className="text-[10px] text-disabled">
-          「质量最强」按费用曲线：≤7 主 3 费，8 少量 5 费，9 大量 5 费，10+ 主 4/5 费，仅能合理应用转职和凑高费卡，阵容强度不保证；
+          不受费用限制，可用低费卡凑羁绊。锁定英雄均不受限。没有终身黄铜阵容强度会很低，开完奖励变阵比较依赖熟练度。
         </p>
       </div>
 
@@ -213,6 +237,9 @@ export default function InputPanel() {
 
       {/* 拉克丝配置 */}
       <LuxConfig />
+
+      {/* 卡兹克配置 */}
+      <KhazixConfig />
 
       {/* 锁定英雄 */}
       <HeroSelect

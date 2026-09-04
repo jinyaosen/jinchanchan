@@ -1,6 +1,11 @@
 /// <reference lib="webworker" />
-import type { SolverProgress, WorkerRequest, WorkerResponse } from '../data/types';
-import { runSolver } from './workerMain';
+import type {
+  PlanProgress,
+  SolverProgress,
+  WorkerRequest,
+  WorkerResponse,
+} from '../data/types';
+import { runPlanner, runSolver } from './workerMain';
 
 /**
  * Web Worker 入口与通信协议。
@@ -24,35 +29,28 @@ ctx.onmessage = (event: MessageEvent) => {
     return;
   }
 
-  if (msg?.type === 'solve') {
-    cancelRequested = false;
-    const request = event.data as WorkerRequest;
+  if (msg?.type !== 'solve' && msg?.type !== 'plan') return;
 
-    const onProgress = (progress: SolverProgress): void => {
-      const response: WorkerResponse = {
-        type: 'progress',
-        requestId: request.requestId,
-        payload: progress,
-      };
-      ctx.postMessage(response);
-    };
+  cancelRequested = false;
+  const request = event.data as WorkerRequest;
+  const isCancelled = () => cancelRequested;
 
-    runSolver(request, onProgress, () => cancelRequested)
-      .then((result) => {
-        const response: WorkerResponse = {
-          type: 'result',
-          requestId: request.requestId,
-          payload: result,
-        };
-        ctx.postMessage(response);
-      })
-      .catch((err: unknown) => {
-        const response: WorkerResponse = {
-          type: 'error',
-          requestId: request.requestId,
-          payload: { message: err instanceof Error ? err.message : String(err) },
-        };
-        ctx.postMessage(response);
-      });
+  const post = (type: WorkerResponse['type'], payload: WorkerResponse['payload']): void => {
+    const response: WorkerResponse = { type, requestId: request.requestId, payload };
+    ctx.postMessage(response);
+  };
+
+  const onError = (err: unknown): void => {
+    post('error', { message: err instanceof Error ? err.message : String(err) });
+  };
+
+  if (request.type === 'plan') {
+    runPlanner(request, (progress: PlanProgress) => post('progress', progress), isCancelled)
+      .then((result) => post('result', result))
+      .catch(onError);
+  } else {
+    runSolver(request, (progress: SolverProgress) => post('progress', progress), isCancelled)
+      .then((result) => post('result', result))
+      .catch(onError);
   }
 };
